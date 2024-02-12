@@ -14,39 +14,40 @@ function calculator() {
             return n1 * n2
         },
         "/": function divide(n1, n2) {
-            return n1 / n2
+            if (n1 % n2 === 0) {
+                return n1 / n2
+            }
+            else {
+                return (n1 / n2).toFixed(2);
+            }
         }
     }
 
     let validInput = false;
     
     while (!validInput){
-        let operator = rs.question('What operation do you want to perform?\n');
-        if (operator in operations) {
-            let num1;
-            let num2;
+        let equation = rs.question('What operation do you want to perform?\n');
+        if (equation.includes('+') || equation.includes('-') || equation.includes('*') || equation.includes('/')){
+            const problem = equation.split(/\s*([\+\-\*\/])\s*/).filter(problem => problem.trim() !== '');
 
-            while (isNaN(parseFloat(num1))){
-                num1 = rs.question('Please enter the first number\n')
-                if (isNaN(parseFloat(num1))) {
-                    console.log("That is not a valid number");
+            if (problem.length === 3) {
+                const num1 = parseFloat(problem[0]);
+                const operator = problem[1]
+                const num2 = parseFloat(problem[2]);
+
+            
+                if (!isNaN(num1) && operator in operations && !isNaN(num2)){
+                    const result = operations[operator](num1, num2);
+                    console.log("The result is " + result);
+                    validInput = true;
+                }
+                else {
+                    console.log("Invalid input. Please enter a valid operation in the format: number operator number (ex: 1 + 2)")
                 }
             }
-
-            while (isNaN(parseFloat(num2))){
-                num2 = rs.question('Please enter the second number\n')
-                if (isNaN(parseFloat(num2))) {
-                    console.log("That is not a valid number");
-                }
+            else {
+                console.log("Invalid input. Please enter a valid operation in the format: number operator number (ex: 1 + 2)")
             }
-
-                
-            const result = operations[operator](parseFloat(num1), parseFloat(num2));
-            console.log("The result is " + result);
-            validInput = true;
-        }
-        else {
-            console.log("That is not a valid operation")
         }
     }
     
